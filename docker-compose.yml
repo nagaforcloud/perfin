@@ -1,0 +1,83 @@
+# ─── PerFin Docker Compose ────────────────────────────────────────────────────
+#
+# Quick start:
+#   docker compose up -d
+#   open http://localhost:8000
+#
+# Services:
+#   python-api  — Tornado REST API + React SPA (port 8000)
+#   node-api    — Fastify REST API, proxies analytics to python (port 8001)
+#   llama-cpp   — Local LLM server for transaction categorization (port 8080)
+#
+# Auth: set PERFIN_API_KEY in .env to enable (leave empty for no auth)
+
+services:
+  # ─── Python Backend (primary) ───────────────────────────────────────────
+  python-api:
+    build:
+      context: ./ai_accountant
+      additional_contexts:
+        react: ./ai_accountant_react
+    ports:
+      - "${PYTHON_PORT:-8000}:8000"
+    volumes:
+      - perfin-data:/app/data
+      - perfin-db:/app/database
+    environment:
+      - PERFIN_API_KEY=${PERFIN_API_KEY:-}
+      - LLM_ENDPOINT=${LLM_ENDPOINT:-http://llama-cpp:8080/v1/chat/completions}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/accounts"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ─── Node Backend (optional — can run without it) ────────────────────────
+  node-api:
+    build:
+      context: ./ai_accountant_node
+    ports:
+      - "${NODE_PORT:-8001}:8001"
+    volumes:
+      - ./ai_accountant:/ai_accountant:ro  # Python code
+      - perfin-db:/ai_accountant/database  # Writable DB (overrides ro)
+    environment:
+      - PORT=8001
+      - HOST=0.0.0.0
+      - PERFIN_API_KEY=${PERFIN_API_KEY:-}
+      - ANALYTICS_BACKEND=http://python-api:8000
+      - PERFIN_PYTHON=python3
+    depends_on:
+      python-api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ─── LLM Server (optional — skip if not using LLM categorization) ────────
+  llama-cpp:
+    image: ghcr.io/ggerganov/llama.cpp:server
+    ports:
+      - "${LLM_PORT:-8080}:8080"
+    volumes:
+      - ${LLM_MODEL_PATH:-./models}:/models:ro
+    command:
+      - -m
+      - /models/${LLM_MODEL_FILE:-model.gguf}
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8080"
+      - -c
+      - "4096"
+    restart: unless-stopped
+    profiles:
+      - llm  # Only starts with: docker compose --profile llm up
+
+volumes:
+  perfin-data:
+  perfin-db:

@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "SF Pro Text", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-display: "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+}
+
+:root {
+  --bg: #F5F5F7;
+  --surface: #FFFFFF;
+  --surface-2: #FAFAFA;
+  --surface-hover: #F0F0F2;
+  --border: #E5E5EA;
+  --border-strong: #C7C7CC;
+  --text: #1D1D1F;
+  --text-muted: #6E6E73;
+  --text-subtle: #AEAEB2;
+  --text-inverse: #FFFFFF;
+  --primary: #0071E3;
+  --primary-hover: #0077ED;
+  --primary-soft: #E8F4FD;
+  --accent: #30B158;
+  --accent-hover: #2D9B4E;
+  --accent-soft: #E8F8ED;
+  --success: #30B158;
+  --success-soft: #E8F8ED;
+  --danger: #FF3B30;
+  --danger-soft: #FFECEB;
+  --warning: #FF9F0A;
+  --warning-soft: #FFF4E0;
+  --info: #5AC8FA;
+  --info-soft: #E8F7FE;
+  --shadow-card: 0 4px 6px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 8px 16px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-modal: 0 16px 48px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
+  --ring-focus: 0 0 0 3px rgba(0,113,227,0.25);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --sidebar-width: 220px;
+  --sidebar-collapsed: 56px;
+  --topbar-height: 52px;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #1C1C1E;
+  --surface-2: #2C2C2E;
+  --surface-hover: #3A3A3C;
+  --border: #38383A;
+  --border-strong: #545458;
+  --text: #F5F5F7;
+  --text-muted: #98989D;
+  --text-subtle: #636366;
+  --text-inverse: #1D1D1F;
+  --primary: #0A84FF;
+  --primary-hover: #409CFF;
+  --primary-soft: #1A2A3A;
+  --accent: #30D158;
+  --accent-hover: #34C759;
+  --accent-soft: #1A2A20;
+  --success: #30D158;
+  --success-soft: #1A2A20;
+  --danger: #FF453A;
+  --danger-soft: #3A1A1A;
+  --warning: #FFD60A;
+  --warning-soft: #3A3010;
+  --info: #64D2FF;
+  --info-soft: #1A2A30;
+  --shadow-card: 0 4px 6px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-card-hover: 0 8px 16px rgba(0,0,0,0.4);
+  --shadow-modal: 0 16px 48px rgba(0,0,0,0.5);
+  --ring-focus: 0 0 0 3px rgba(10,132,255,0.35);
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+*:focus-visible { outline: none; box-shadow: var(--ring-focus); border-radius: var(--radius-sm); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@keyframes pulse-soft { 0%,100%{background-color:var(--surface-2)}50%{background-color:var(--surface-hover)} }
+.skeleton { animation: pulse-soft 1.6s ease-in-out infinite; border-radius: var(--radius-sm); }
+
+@keyframes slide-in-right { from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1} }
+@keyframes modal-in { from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)} }
+
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: var(--surface) !important; border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important; box-shadow: var(--shadow-card-hover) !important; padding: 8px 12px !important;
+}
+.recharts-tooltip-label { color: var(--text-muted) !important; font-size: 12px !important; }
+.recharts-tooltip-item { color: var(--text) !important; font-size: 13px !important; font-weight: 600 !important; }
+
+@media (max-width: 768px) {
+  :root { --sidebar-width: 0px; }
+}

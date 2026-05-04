@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Accountant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+
+<div class="layout" id="app">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <rect width="30" height="30" rx="9" fill="url(#logo-grad)"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#818cf8"/>
+              <stop offset="1" stop-color="#4f46e5"/>
+            </linearGradient>
+          </defs>
+          <path d="M7 21L11.5 11.5L15.5 17L18.5 13.5L23 21H7Z" fill="white" opacity=".92"/>
+          <circle cx="21" cy="9.5" r="2.5" fill="#c7d2fe"/>
+        </svg>
+        <span class="logo-text">AI Accountant</span>
+      </div>
+      <button id="sidebar-toggle" class="sidebar-toggle-btn" title="Collapse sidebar">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Account selector -->
+    <div class="account-switcher">
+      <label class="field-label">Account</label>
+      <select id="account-select" class="account-select">
+        <option value="">All Accounts</option>
+      </select>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#dashboard"    class="nav-item" data-route="dashboard">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#transactions" class="nav-item" data-route="transactions">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+        <span>Transactions</span>
+      </a>
+      <a href="#upload"       class="nav-item" data-route="upload">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        <span>Upload</span>
+      </a>
+      <a href="#analytics"    class="nav-item" data-route="analytics">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+        <span>Analytics</span>
+      </a>
+      <a href="#accounts"     class="nav-item" data-route="accounts">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        <span>Accounts</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div id="sidebar-health" class="health-badge"></div>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="main" id="main-content">
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>Loading…</p>
+    </div>
+  </main>
+
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<!-- Modal container -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-box" class="modal-box"></div>
+</div>
+
+<!-- JS modules (order matters) -->
+<script src="/js/api.js"></script>
+<script src="/js/components/charts.js"></script>
+<script src="/js/pages/dashboard.js"></script>
+<script src="/js/pages/transactions.js"></script>
+<script src="/js/pages/upload.js"></script>
+<script src="/js/pages/analytics.js"></script>
+<script src="/js/pages/accounts.js"></script>
+<script src="/js/app.js"></script>
+
+</body>
+</html>

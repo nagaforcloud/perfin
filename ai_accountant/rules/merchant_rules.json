@@ -1,0 +1,207 @@
+[
+  {
+    "keywords": ["salary", "payroll", "direct deposit", "paycheck"],
+    "category": "Income",
+    "priority": 10
+  },
+  {
+    "keywords": ["refund", "reimbursement", "cashback"],
+    "category": "Income",
+    "priority": 10
+  },
+  {
+    "keywords": ["interest", "dividend", "capital gain"],
+    "category": "Investment",
+    "priority": 10
+  },
+  {
+    "keywords": ["swiggy", "zomato", "ubereats", "doordash", "grubhub"],
+    "category": "Food",
+    "priority": 9
+  },
+  {
+    "keywords": ["restaurant", "cafe", "coffee", "starbucks", "dunkin"],
+    "category": "Food",
+    "priority": 9
+  },
+  {
+    "keywords": ["mcdonald", "burger king", "kfc", "pizza", "subway", "taco bell"],
+    "category": "Food",
+    "priority": 9
+  },
+  {
+    "keywords": ["walmart", "target", "costco", "whole foods", "trader joe", "safeway", "blinkit"],
+    "category": "Groceries",
+    "priority": 9
+  },
+  {
+    "keywords": ["grocery", "supermarket", "mart", "kroger", "albertsons"],
+    "category": "Groceries",
+    "priority": 8
+  },
+  {
+    "keywords": ["uber", "lyft", "ola", "taxi", "grab"],
+    "category": "Transport",
+    "priority": 9
+  },
+  {
+    "keywords": ["fuel", "gas station", "shell", "bp", "exxon", "chevron"],
+    "category": "Transport",
+    "priority": 9
+  },
+  {
+    "keywords": ["parking", "toll", "metro", "transit"],
+    "category": "Transport",
+    "priority": 8
+  },
+  {
+    "keywords": ["amazon", "ebay", "etsy", "aliexpress"],
+    "category": "Shopping",
+    "priority": 9
+  },
+  {
+    "keywords": ["nike", "adidas", "clothing", "apparel", "zara", "h&m"],
+    "category": "Shopping",
+    "priority": 8
+  },
+  {
+    "keywords": ["netflix", "hulu", "disney", "prime video", "hbo", "apple tv"],
+    "category": "Subscription",
+    "priority": 10
+  },
+  {
+    "keywords": ["spotify", "apple music", "youtube premium", "soundcloud"],
+    "category": "Subscription",
+    "priority": 10
+  },
+  {
+    "keywords": ["adobe", "microsoft 365", "office 365", "dropbox", "icloud"],
+    "category": "Subscription",
+    "priority": 10
+  },
+  {
+    "keywords": ["electric", "water", "gas utility", "sewer", "power"],
+    "category": "Utilities",
+    "priority": 9
+  },
+  {
+    "keywords": ["internet", "comcast", "verizon", "at&t", "spectrum", "cox"],
+    "category": "Utilities",
+    "priority": 9
+  },
+  {
+    "keywords": ["phone", "mobile", "wireless", "t-mobile", "att", "verizon"],
+    "category": "Utilities",
+    "priority": 8
+  },
+  {
+    "keywords": ["rent", "lease", "rental"],
+    "category": "Rent",
+    "priority": 10
+  },
+  {
+    "keywords": ["mortgage", "home loan"],
+    "category": "Rent",
+    "priority": 10
+  },
+  {
+    "keywords": ["home depot", "lowes", "hardware", "ace hardware"],
+    "category": "Home Maintenance",
+    "priority": 8
+  },
+  {
+    "keywords": ["insurance", "premium", "policy", "geico", "state farm", "progressive"],
+    "category": "Insurance",
+    "priority": 10
+  },
+  {
+    "keywords": ["health", "medical", "hospital", "doctor", "clinic"],
+    "category": "Medical",
+    "priority": 9
+  },
+  {
+    "keywords": ["pharmacy", "cvs", "walgreens", "rite aid", "medicine"],
+    "category": "Medical",
+    "priority": 9
+  },
+  {
+    "keywords": ["sip", "mutual fund", "401k", "ira", "roth", "pension"],
+    "category": "Investment",
+    "priority": 10
+  },
+  {
+    "keywords": ["brokerage", "stock", "shares", "fidelity", "schwab", "etrade"],
+    "category": "Investment",
+    "priority": 9
+  },
+  {
+    "keywords": ["transfer", "venmo", "cash app", "zelle", "paytm", "gpay", "phonepe"],
+    "category": "Transfer",
+    "priority": 8
+  },
+  {
+    "keywords": ["atm withdrawal", "cash withdrawal", "atm"],
+    "category": "Transfer",
+    "priority": 8
+  },
+  {
+    "keywords": ["movie", "cinema", "theater", "imax", "amc", "regal"],
+    "category": "Entertainment",
+    "priority": 9
+  },
+  {
+    "keywords": ["gaming", "playstation", "xbox", "nintendo", "steam"],
+    "category": "Entertainment",
+    "priority": 8
+  },
+  {
+    "keywords": ["hotel", "airbnb", "booking", "marriott", "hilton"],
+    "category": "Travel",
+    "priority": 9
+  },
+  {
+    "keywords": ["airline", "flight", "airport", "delta", "united", "american"],
+    "category": "Travel",
+    "priority": 9
+  },
+  {
+    "keywords": ["tuition", "school", "university", "college", "course"],
+    "category": "Education",
+    "priority": 9
+  },
+  {
+    "keywords": ["book", "kindle", "audible", "barnes noble"],
+    "category": "Education",
+    "priority": 7
+  },
+  {
+    "keywords": ["legal", "attorney", "lawyer", "law firm"],
+    "category": "Professional Services",
+    "priority": 9
+  },
+  {
+    "keywords": ["accounting", "tax", "cpa", "turbotax"],
+    "category": "Professional Services",
+    "priority": 9
+  },
+  {
+    "keywords": ["fee", "charge", "penalty", "late fee", "service fee"],
+    "category": "Other",
+    "priority": 5
+  },
+  {
+    "keywords": ["gym", "fitness", "yoga", "crossfit", "planet fitness"],
+    "category": "Personal Care",
+    "priority": 8
+  },
+  {
+    "keywords": ["salon", "barber", "spa", "massage"],
+    "category": "Personal Care",
+    "priority": 8
+  },
+  {
+    "keywords": ["gift", "donation", "charity", "present"],
+    "category": "Gifts & Donations",
+    "priority": 8
+  }
+]
