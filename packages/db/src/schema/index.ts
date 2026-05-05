@@ -1,2 +1,15 @@
-// Schema re-exports. Tables are added incrementally per plan tasks.
-export {};
+export * from '../enums.js';
+export * from './users.js';
+export * from './sessions.js';
+export * from './connections.js';
+export * from './accounts.js';
+export * from './transactions.js';
+export * from './budgets.js';
+export * from './goals.js';
+export * from './categoryRules.js';
+export * from './recurringSeries.js';
+export * from './anomalies.js';
+export * from './insights.js';
+export * from './agentActions.js';
+export * from './inboundEmails.js';
+export * from './uploadJobs.js';
