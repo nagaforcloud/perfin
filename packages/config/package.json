@@ -1,0 +1,16 @@
+{
+  "name": "@perfin/config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./eslint-preset.js",
+  "files": ["tsconfig.base.json", "eslint-preset.js"],
+  "devDependencies": {
+    "@eslint/js": "9.14.0",
+    "eslint": "9.14.0",
+    "typescript-eslint": "8.13.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "typescript": "^5.6.0"
+  }
+}
