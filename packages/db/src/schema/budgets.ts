@@ -1,8 +1,8 @@
 import {
   pgTable, serial, integer, text, bigint, timestamp, uniqueIndex,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { accounts } from './accounts.js';
+import { users } from './users';
+import { accounts } from './accounts';
 
 export const budgets = pgTable(
   'budgets',

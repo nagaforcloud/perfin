@@ -1,9 +1,9 @@
 import {
   pgTable, serial, integer, text, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { transactions } from './transactions.js';
-import { inboundEmailStatusEnum } from '../enums.js';
+import { users } from './users';
+import { transactions } from './transactions';
+import { inboundEmailStatusEnum } from '../enums';
 
 export const inboundEmails = pgTable(
   'inbound_emails',

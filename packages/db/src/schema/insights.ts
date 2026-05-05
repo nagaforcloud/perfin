@@ -1,8 +1,8 @@
 import {
   pgTable, serial, integer, text, real, jsonb, boolean, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { insightSurfaceEnum } from '../enums.js';
+import { users } from './users';
+import { insightSurfaceEnum } from '../enums';
 
 export const insights = pgTable(
   'insights',

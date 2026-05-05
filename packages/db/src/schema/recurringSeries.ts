@@ -1,8 +1,8 @@
 import {
   pgTable, serial, integer, text, bigint, real, date, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { recurringStatusEnum } from '../enums.js';
+import { users } from './users';
+import { recurringStatusEnum } from '../enums';
 
 export const recurringSeries = pgTable(
   'recurring_series',

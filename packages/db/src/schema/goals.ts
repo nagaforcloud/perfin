@@ -1,9 +1,9 @@
 import {
   pgTable, serial, integer, text, bigint, date, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { accounts } from './accounts.js';
-import { goalStatusEnum } from '../enums.js';
+import { users } from './users';
+import { accounts } from './accounts';
+import { goalStatusEnum } from '../enums';
 
 export const goals = pgTable(
   'goals',

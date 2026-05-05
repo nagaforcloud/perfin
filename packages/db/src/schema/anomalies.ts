@@ -1,9 +1,9 @@
 import {
   pgTable, serial, integer, text, real, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { transactions } from './transactions.js';
-import { anomalyStatusEnum } from '../enums.js';
+import { users } from './users';
+import { transactions } from './transactions';
+import { anomalyStatusEnum } from '../enums';
 
 export const anomalies = pgTable(
   'anomalies',

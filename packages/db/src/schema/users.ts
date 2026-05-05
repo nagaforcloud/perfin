@@ -1,5 +1,5 @@
 import { pgTable, serial, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
-import { planEnum } from '../enums.js';
+import { planEnum } from '../enums';
 
 export const users = pgTable(
   'users',

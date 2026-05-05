@@ -5,7 +5,7 @@ import {
   inboundEmails, uploadJobs,
   planEnum, connectionStatusEnum, anomalyStatusEnum, insightSurfaceEnum,
   uploadStatusEnum, recurringStatusEnum, goalStatusEnum, inboundEmailStatusEnum,
-} from '../src/schema/index.js';
+} from '../src/schema/index';
 
 describe('enums', () => {
   it('plan enum has free/plus/pro', () => {

@@ -1,7 +1,7 @@
 import {
   pgTable, serial, integer, text, jsonb, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
+import { users } from './users';
 
 export const agentActions = pgTable(
   'agent_actions',

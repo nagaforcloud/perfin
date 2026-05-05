@@ -1,8 +1,8 @@
 import {
   pgTable, serial, integer, text, bigint, timestamp, index,
 } from 'drizzle-orm/pg-core';
-import { users } from './users.js';
-import { uploadStatusEnum } from '../enums.js';
+import { users } from './users';
+import { uploadStatusEnum } from '../enums';
 
 export const uploadJobs = pgTable(
   'upload_jobs',
