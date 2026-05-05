@@ -1,37 +1,43 @@
-# Dependencies
+# Node
 node_modules/
-__pycache__/
-venv/
-*.pyc
-*.pyo
-
-# Environment (contains secrets)
-.env
-
-# Docker
-.git/
-
-# IDE
-.idea/
-.vscode/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Build / dist
+.next/
 dist/
+.turbo/
+
+# Build outputs
 build/
 *.egg-info/
+
+# Environment (secrets)
+.env
+.env.local
+.env.*.local
 
 # Logs
 *.log
 npm-debug.log*
 
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# Brainstorming artifacts (project-local)
+.superpowers/
+
 # AI tooling configs (personal)
 .claude/
 .hermes/
-.superpowers/
 
-# Large generated files
-ai_accountant_skill_review_iter1.html
+# Legacy Python (in _legacy/)
+__pycache__/
+venv/
+*.pyc
+*.pyo
