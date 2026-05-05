@@ -122,24 +122,32 @@ async function main() {
   }
   console.log(`Transactions imported: ${imported} / ${sqliteTxns.length}`);
 
-  // 4. Budgets
-  const sqliteBudgets = sqlite
-    .prepare(`SELECT category, amount_cents, period, account FROM budgets`)
-    .all() as SqliteBudget[];
+  // 4. Budgets (optional — older SQLite ledgers don't have this table)
+  const hasBudgets = sqlite
+    .prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name='budgets'`)
+    .get();
 
-  for (const b of sqliteBudgets) {
-    await db
-      .insert(budgets)
-      .values({
-        userId: user.id,
-        category: b.category,
-        amountCents: b.amount_cents,
-        period: b.period ?? 'monthly',
-        accountId: accountIdByName.get(b.account) ?? null,
-      })
-      .onConflictDoNothing();
+  if (hasBudgets) {
+    const sqliteBudgets = sqlite
+      .prepare(`SELECT category, amount_cents, period, account FROM budgets`)
+      .all() as SqliteBudget[];
+
+    for (const b of sqliteBudgets) {
+      await db
+        .insert(budgets)
+        .values({
+          userId: user.id,
+          category: b.category,
+          amountCents: b.amount_cents,
+          period: b.period ?? 'monthly',
+          accountId: accountIdByName.get(b.account) ?? null,
+        })
+        .onConflictDoNothing();
+    }
+    console.log(`Budgets imported: ${sqliteBudgets.length}`);
+  } else {
+    console.log('Budgets imported: 0 (no budgets table in source SQLite)');
   }
-  console.log(`Budgets imported: ${sqliteBudgets.length}`);
 
   sqlite.close();
   await close();
