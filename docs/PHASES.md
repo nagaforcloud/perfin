@@ -8,7 +8,7 @@ Living document. Updated as each phase completes.
 |---|---|---|---|---|
 | 0 — Foundations | ✅ **Done** | `v0.1.0-phase0` | [Phase 0 plan](superpowers/plans/2026-05-04-perfin-phase-0-foundations.md) | Monorepo, schema, auth, design system, sidebar shell |
 | 1 — Core data loop | ✅ **Done** | `v0.2.0-phase1` | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
-| 2 — Insights & Home | 📋 **Planned** | — | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
+| 2 — Insights & Home | ✅ **Done** | `v0.3.0-phase2` | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
 | 3 — Agentic chat | 🕓 Not started | — | — | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
 | 4 — Multi-source ingestion | 🕓 Not started | — | — | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
 | 5 — SaaS skin | 🕓 Not started | — | — | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
@@ -44,6 +44,18 @@ Per the design spec the rough estimate is **~10 weeks solo**. Each phase ends in
 - Web grew: React Query provider + typed fetcher + HMAC worker client; `POST /api/upload` (auth, persist to disk, dispatch to worker); `GET /api/transactions` (filtered, searchable); `PATCH /api/transactions/[id]`; `GET/POST /api/accounts`; Transactions page (table + filters + edit Sheet); Accounts page (grid + add modal); Upload page (drag-drop + live SSE progress); 3-step onboarding (welcome → currency → connect); sidebar with `lucide-react` icons + Upload CTA; onboarding route protection in middleware.
 - Web build: 17 routes, all under the 250 kB First Load JS bar.
 - Architecture observation: file storage is **local disk** under `data/uploads/` (gitignored). R2/S3 swap is deferred to Phase 5.
+
+---
+
+## Phase 2 completion notes
+
+- **3 commits** behind tag `v0.3.0-phase2`. All 6 packages typecheck; full repo build clean.
+- **128 unit tests pass**: core 51 (added 21 — recurring, anomalies, drift, narrative stat-block, budget status, KPI), db 23, ui 31 (added 5 — Stat, Sparkline, AreaSparkline, AITile), extractors 13, worker 10 (added 3 — scheduler, regenerate stub, plus prior).
+- New `@perfin/core` modules: `recurring/` (cluster + cadence + confidence), `anomalies/` (large-amount, category-outlier, rare-merchant), `insights/drift.ts` (MoM ≥20% threshold), `insights/narrative.ts` (Claude Sonnet 4.6 monthly summary, deterministic stat block), `insights/generate.ts` (orchestrator), `budget/status.ts`, `home/kpi.ts`.
+- New UI primitives: `Stat`, `Sparkline`, `AreaSparkline`, `AITile`.
+- Worker grew: `node-cron` nightly scheduler (2:00, configurable, `CRON_DISABLED` flag), `regenerateForUser` (deletes-then-inserts recurring + anomalies + insights idempotently), HMAC-protected `POST /jobs/regenerate`.
+- Web grew: `/api/home`, `/api/insights` + `[id]`, `/api/inbox`, `/api/budgets`, `/api/recurring`, `/api/test-regenerate` (dev-only). Pages: bento Home (hero net worth + area sparkline + KPI strip + today's insight tile + recent activity + inbox preview), Insights (tabbed feed + dismiss), Inbox (needs-review + open anomalies), Budgets (progress bars). Sidebar shows live inbox badge with 30s polling.
+- Web build: 26 routes, all under the 250 kB First Load JS bar.
 
 ---
 
