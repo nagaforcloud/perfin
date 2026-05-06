@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('signup → land on /app → sidebar visible', async ({ page }) => {
+test('signup → onboarding → land on /app', async ({ page }) => {
   const stamp = Date.now();
   const email = `e2e-${stamp}@perfin.dev`;
   const password = 'password12345';
@@ -10,10 +10,14 @@ test('signup → land on /app → sidebar visible', async ({ page }) => {
   await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: /create account/i }).click();
 
-  await page.waitForURL('**/app', { timeout: 10_000 });
-  await expect(page.getByText('Welcome.')).toBeVisible();
+  await page.waitForURL('**/onboarding/welcome', { timeout: 10_000 });
+  await page.getByRole('link', { name: /get started/i }).click();
+  await page.waitForURL('**/onboarding/locale');
+  await page.getByRole('button', { name: /continue/i }).click();
+  await page.waitForURL('**/onboarding/connect');
+  await page.getByRole('link', { name: /skip for now/i }).click();
+  await page.waitForURL('**/app');
   await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Insights' })).toBeVisible();
 });
 
 test('logout redirect: /app while logged out goes to /login', async ({ page, context }) => {

@@ -10,6 +10,11 @@ export default auth((req) => {
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
+  if (path.startsWith('/onboarding') && !isLoggedIn) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
   if ((path === '/login' || path === '/signup') && isLoggedIn) {
     const url = req.nextUrl.clone();
     url.pathname = '/app';
@@ -19,5 +24,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ['/app/:path*', '/login', '/signup'],
+  matcher: ['/app/:path*', '/onboarding/:path*', '/login', '/signup'],
 };

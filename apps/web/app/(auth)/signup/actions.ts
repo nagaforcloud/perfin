@@ -38,5 +38,5 @@ export async function signupAction(_prev: SignupState, formData: FormData): Prom
   }
 
   await signIn('credentials', { email, password, redirect: false });
-  redirect('/app');
+  redirect('/onboarding/welcome');
 }

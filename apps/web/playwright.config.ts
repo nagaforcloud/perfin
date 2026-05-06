@@ -9,11 +9,19 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  webServer: [
+    {
+      command: 'pnpm --filter @perfin/worker dev',
+      url: 'http://localhost:8001/health',
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
+    },
+    {
+      command: 'pnpm dev',
+      url: 'http://localhost:3000',
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
+    },
+  ],
   projects: [{ name: 'chromium', use: devices['Desktop Chrome'] }],
 });

@@ -6,6 +6,8 @@ const schema = z.object({
   AUTH_URL: z.string().url(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+  WORKER_URL: z.string().url().default('http://localhost:8001'),
+  WORKER_HMAC_SECRET: z.string().min(8),
 });
 
 export const env = schema.parse({
@@ -14,4 +16,6 @@ export const env = schema.parse({
   AUTH_URL: process.env.AUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  WORKER_URL: process.env.WORKER_URL,
+  WORKER_HMAC_SECRET: process.env.WORKER_HMAC_SECRET,
 });

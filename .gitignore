@@ -45,3 +45,4 @@ venv/
 
 # Legacy review artifact
 _legacy/ai_accountant_skill_review_iter1.html
+data/uploads/
