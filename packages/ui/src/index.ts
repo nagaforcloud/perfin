@@ -6,3 +6,7 @@ export { Badge, type BadgeProps, type BadgeVariant } from './components/Badge';
 export { Skeleton, type SkeletonProps, type SkeletonVariant } from './components/Skeleton';
 export { Toast, type ToastProps, type ToastTone } from './components/Toast';
 export { Modal, type ModalProps, type ModalSize } from './components/Modal';
+export { Stat, type StatProps } from './components/Stat';
+export { Sparkline, type SparklineProps } from './components/Sparkline';
+export { AreaSparkline, type AreaSparklineProps } from './components/AreaSparkline';
+export { AITile, type AITileProps } from './components/AITile';
