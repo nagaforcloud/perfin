@@ -8,6 +8,7 @@ const schema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   WORKER_URL: z.string().url().default('http://localhost:8001'),
   WORKER_HMAC_SECRET: z.string().min(8),
+  ANTHROPIC_API_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -18,4 +19,5 @@ export const env = schema.parse({
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   WORKER_URL: process.env.WORKER_URL,
   WORKER_HMAC_SECRET: process.env.WORKER_HMAC_SECRET,
+  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
 });

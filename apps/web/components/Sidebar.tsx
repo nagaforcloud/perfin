@@ -63,7 +63,13 @@ export function Sidebar() {
         >
           <Upload className="w-4 h-4" /> Upload statement
         </Link>
-        <p className="text-xs text-text-subtle px-3">v0.3 · Phase 2</p>
+        <Link
+          href="/app/settings/activity"
+          className="flex items-center gap-2 h-9 px-3 rounded-md text-sm font-medium text-text-muted hover:bg-surface-2 hover:text-text"
+        >
+          Settings
+        </Link>
+        <p className="text-xs text-text-subtle px-3">v0.4 · Phase 3</p>
       </footer>
     </aside>
   );
