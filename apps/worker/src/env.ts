@@ -7,6 +7,8 @@ const schema = z.object({
   WORKER_HMAC_SECRET: z.string().min(8),
   UPLOAD_DIR: z.string().default(resolve(process.cwd(), 'data/uploads')),
   ANTHROPIC_API_KEY: z.string().optional(),
+  CRON_DISABLED: z.string().optional(),
+  CRON_NIGHTLY: z.string().default('0 2 * * *'),
 });
 
 export const env = schema.parse({
@@ -15,4 +17,6 @@ export const env = schema.parse({
   WORKER_HMAC_SECRET: process.env.WORKER_HMAC_SECRET,
   UPLOAD_DIR: process.env.UPLOAD_DIR,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+  CRON_DISABLED: process.env.CRON_DISABLED,
+  CRON_NIGHTLY: process.env.CRON_NIGHTLY,
 });

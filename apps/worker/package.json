@@ -16,6 +16,7 @@
     "@perfin/extractors": "workspace:*",
     "drizzle-orm": "0.36.0",
     "fastify": "5.1.0",
+    "node-cron": "3.0.3",
     "zod": "3.23.8"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "@types/node": "22.9.0",
     "tsx": "4.19.1",
     "typescript": "5.6.3",
-    "vitest": "2.1.4"
+    "vitest": "2.1.4",
+    "@types/node-cron": "3.0.11"
   }
 }
