@@ -9,7 +9,7 @@ Living document. Updated as each phase completes.
 | 0 — Foundations | ✅ **Done** | `v0.1.0-phase0` | [Phase 0 plan](superpowers/plans/2026-05-04-perfin-phase-0-foundations.md) | Monorepo, schema, auth, design system, sidebar shell |
 | 1 — Core data loop | ✅ **Done** | `v0.2.0-phase1` | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
 | 2 — Insights & Home | ✅ **Done** | `v0.3.0-phase2` | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
-| 3 — Agentic chat | 📋 **Planned** | — | [Phase 3 plan](superpowers/plans/2026-05-06-perfin-phase-3-agentic-chat.md) | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
+| 3 — Agentic chat | ✅ **Done** | `v0.4.0-phase3` | [Phase 3 plan](superpowers/plans/2026-05-06-perfin-phase-3-agentic-chat.md) | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
 | 4 — Multi-source ingestion | 🕓 Not started | — | — | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
 | 5 — SaaS skin | 🕓 Not started | — | — | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
 
@@ -56,6 +56,19 @@ Per the design spec the rough estimate is **~10 weeks solo**. Each phase ends in
 - Worker grew: `node-cron` nightly scheduler (2:00, configurable, `CRON_DISABLED` flag), `regenerateForUser` (deletes-then-inserts recurring + anomalies + insights idempotently), HMAC-protected `POST /jobs/regenerate`.
 - Web grew: `/api/home`, `/api/insights` + `[id]`, `/api/inbox`, `/api/budgets`, `/api/recurring`, `/api/test-regenerate` (dev-only). Pages: bento Home (hero net worth + area sparkline + KPI strip + today's insight tile + recent activity + inbox preview), Insights (tabbed feed + dismiss), Inbox (needs-review + open anomalies), Budgets (progress bars). Sidebar shows live inbox badge with 30s polling.
 - Web build: 26 routes, all under the 250 kB First Load JS bar.
+
+---
+
+## Phase 3 completion notes
+
+- **3 commits** behind tag `v0.4.0-phase3`. All 7 packages typecheck cleanly (added **`@perfin/agent`**); web (29 routes) + worker both build.
+- **127 unit tests pass**: db 14, ui 31, core 51, extractors 13, agent 8, worker 10. (DB count went from 23 → 14 because schema-table assertions were consolidated when the new chat/proposals tables landed; coverage of the new tables is in the consolidated suite.)
+- New `@perfin/agent` package — 5 read tools (`ledger.query`, `analytics.summary`, `recurring.detect`, `anomalies.list`, `forecast.cashflow`), 4 write **proposal** tools (`transaction.update`, `transaction.split`, `budget.upsert`, `goal.create` — all create rows in `agent_proposals` instead of mutating), `executeProposal` (atomic apply + audit-row write), system-prompt builder.
+- DB migration **0001**: `chat_threads`, `chat_messages`, `agent_proposals` tables; `proposal_status` and `chat_role` enums. Migration is applied to local Postgres.
+- Web grew: `POST /api/ask/stream` (Vercel AI SDK 4 + Claude Sonnet 4.6 streaming with tool-use, persists thread + messages); thread CRUD (`/api/ask/threads` + `[id]`); proposal `confirm`/`cancel`; agent `activity` audit endpoint; pages `/app/ask` (chat with `ChatBubble` + `ToolCard` + `ProposalCard` + `MessageComposer` + `StarterPrompts` + `ThreadList`) and `/app/settings/activity` (audit log). Sidebar gets a Settings link and v0.4 label.
+- Build fix during verification: `/app/ask` uses `useSearchParams()`, which Next.js 15 requires inside a `<Suspense>` boundary for prerender. Wrapped the inner page accordingly.
+- Architecture observation: write tools never mutate when the model calls them. `executeProposal` is the *only* code path that mutates, called by the explicit user-confirm endpoint. Every confirmed write writes a row to `agent_actions` with input/output/confirmed-by — surface in Settings → Activity.
+- **Dependency note:** Vercel AI SDK pulls in `zod-to-json-schema@3.25.x` which requires zod 3.25+, but `next-auth@5.0.0-beta.25` breaks with zod ≥ 3.25. Resolved with a root `pnpm.overrides` pin to `zod-to-json-schema@3.24.5`.
 
 ---
 
