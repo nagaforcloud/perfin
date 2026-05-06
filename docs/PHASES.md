@@ -7,7 +7,7 @@ Living document. Updated as each phase completes.
 | Phase | Status | Tag | Plan | What ships |
 |---|---|---|---|---|
 | 0 — Foundations | ✅ **Done** | `v0.1.0-phase0` | [Phase 0 plan](superpowers/plans/2026-05-04-perfin-phase-0-foundations.md) | Monorepo, schema, auth, design system, sidebar shell |
-| 1 — Core data loop | 📋 **Planned** | — | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
+| 1 — Core data loop | ✅ **Done** | `v0.2.0-phase1` | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
 | 2 — Insights & Home | 🕓 Not started | — | — | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
 | 3 — Agentic chat | 🕓 Not started | — | — | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
 | 4 — Multi-source ingestion | 🕓 Not started | — | — | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
@@ -34,13 +34,26 @@ Per the design spec the rough estimate is **~10 weeks solo**. Each phase ends in
 
 ---
 
+## Phase 1 completion notes
+
+- **2 commits** (`09ec158`, `45205a5`). Tag `v0.2.0-phase1`.
+- 6 packages now typecheck cleanly (`@perfin/config`, `@perfin/db`, `@perfin/ui`, `@perfin/core`, `@perfin/extractors`, `@perfin/web`, `@perfin/worker`).
+- **99 unit tests pass**: core 30, db 23, ui 26, extractors 13, worker 7.
+- New packages: **`@perfin/core`** (money, text/dedupe-hash, normalize, 21-category taxonomy, rule engine, Claude Haiku 4.5 wrapper, orchestrator, 57 seed rules ported from legacy `merchant_rules.json`); **`@perfin/extractors`** (CSV with header sniff + debit/credit, Excel via SheetJS→CSV, PDF via `pdfjs-dist` legacy build, HDFC bank heuristic, mime/extension dispatch).
+- Worker grew: HMAC sign/verify, in-memory job registry with EventEmitter SSE, full `extract → normalize → categorize → insert` pipeline (Postgres `onConflictDoNothing` dedup), `POST /jobs/upload` (HMAC-verified, async), `GET /jobs/:id/stream` (SSE).
+- Web grew: React Query provider + typed fetcher + HMAC worker client; `POST /api/upload` (auth, persist to disk, dispatch to worker); `GET /api/transactions` (filtered, searchable); `PATCH /api/transactions/[id]`; `GET/POST /api/accounts`; Transactions page (table + filters + edit Sheet); Accounts page (grid + add modal); Upload page (drag-drop + live SSE progress); 3-step onboarding (welcome → currency → connect); sidebar with `lucide-react` icons + Upload CTA; onboarding route protection in middleware.
+- Web build: 17 routes, all under the 250 kB First Load JS bar.
+- Architecture observation: file storage is **local disk** under `data/uploads/` (gitignored). R2/S3 swap is deferred to Phase 5.
+
+---
+
 ## Update protocol
 
 When a phase completes:
 
 1. Move it to ✅ **Done**.
 2. Add the git tag (`vX.Y.Z-phaseN`).
-3. Add a short completion-notes section below mirroring Phase 0's.
+3. Add a short completion-notes section below mirroring earlier ones.
 4. Commit + push (`docs(phases): mark Phase N as done`).
 
 When the next phase plan is written:
