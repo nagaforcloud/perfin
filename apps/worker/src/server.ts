@@ -1,10 +1,14 @@
 import Fastify from 'fastify';
-import { env } from './env.js';
-import { healthRoutes } from './routes/health.js';
+import { env } from './env';
+import { healthRoutes } from './routes/health';
+import { uploadRoutes } from './routes/upload';
+import { streamRoutes } from './routes/stream';
 
 export async function buildServer() {
   const app = Fastify({ logger: true });
   await app.register(healthRoutes);
+  await app.register(uploadRoutes);
+  await app.register(streamRoutes);
   return app;
 }
 

@@ -2,7 +2,7 @@
   "extends": "@perfin/config/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "noEmit": false,
+    "noEmit": true,
     "types": ["node", "vitest/globals"]
   },
   "include": ["src/**/*", "tests/**/*"]
