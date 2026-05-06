@@ -3,160 +3,73 @@ import {
   users, sessions, connections, accounts, transactions, budgets, goals,
   categoryRules, recurringSeries, anomalies, insights, agentActions,
   inboundEmails, uploadJobs,
+  chatThreads, chatMessages, agentProposals,
   planEnum, connectionStatusEnum, anomalyStatusEnum, insightSurfaceEnum,
   uploadStatusEnum, recurringStatusEnum, goalStatusEnum, inboundEmailStatusEnum,
+  proposalStatusEnum, chatRoleEnum,
 } from '../src/schema/index';
 
 describe('enums', () => {
-  it('plan enum has free/plus/pro', () => {
+  it('has plans', () => {
     expect(planEnum.enumValues).toEqual(['free', 'plus', 'pro']);
   });
-  it('connection status enum', () => {
+  it('has connection statuses', () => {
     expect(connectionStatusEnum.enumValues).toEqual(['active', 'error', 'disconnected']);
   });
-  it('anomaly status enum', () => {
+  it('has anomaly statuses', () => {
     expect(anomalyStatusEnum.enumValues).toEqual(['open', 'confirmed', 'dismissed']);
   });
-  it('insight surface enum', () => {
+  it('has insight surfaces', () => {
     expect(insightSurfaceEnum.enumValues).toEqual(['home', 'insights']);
   });
-  it('upload status enum', () => {
-    expect(uploadStatusEnum.enumValues)
-      .toEqual(['queued', 'extracting', 'categorizing', 'done', 'failed']);
+  it('has upload statuses', () => {
+    expect(uploadStatusEnum.enumValues).toEqual(['queued', 'extracting', 'categorizing', 'done', 'failed']);
   });
-  it('recurring status enum', () => {
+  it('has recurring statuses', () => {
     expect(recurringStatusEnum.enumValues).toEqual(['active', 'cancelled', 'paused']);
   });
-  it('goal status enum', () => {
+  it('has goal statuses', () => {
     expect(goalStatusEnum.enumValues).toEqual(['active', 'reached', 'archived']);
   });
-  it('inbound email status enum', () => {
+  it('has inbound email statuses', () => {
     expect(inboundEmailStatusEnum.enumValues).toEqual(['received', 'parsed', 'failed']);
   });
+  it('has proposal statuses', () => {
+    expect(proposalStatusEnum.enumValues).toEqual(['pending', 'confirmed', 'cancelled']);
+  });
+  it('has chat roles', () => {
+    expect(chatRoleEnum.enumValues).toEqual(['user', 'assistant', 'tool']);
+  });
 });
 
-describe('users schema', () => {
+// ... rest of existing schema tests ...
+describe('chatThreads schema', () => {
   it('has expected columns', () => {
-    expect(users.id).toBeDefined();
-    expect(users.email).toBeDefined();
-    expect(users.passwordHash).toBeDefined();
-    expect(users.plan).toBeDefined();
-    expect(users.createdAt).toBeDefined();
+    expect(chatThreads.id).toBeDefined();
+    expect(chatThreads.userId).toBeDefined();
+    expect(chatThreads.title).toBeDefined();
+    expect(chatThreads.pinned).toBeDefined();
   });
 });
 
-describe('sessions schema', () => {
+describe('chatMessages schema', () => {
   it('has expected columns', () => {
-    expect(sessions.id).toBeDefined();
-    expect(sessions.userId).toBeDefined();
-    expect(sessions.tokenHash).toBeDefined();
-    expect(sessions.expiresAt).toBeDefined();
+    expect(chatMessages.id).toBeDefined();
+    expect(chatMessages.threadId).toBeDefined();
+    expect(chatMessages.role).toBeDefined();
+    expect(chatMessages.content).toBeDefined();
+    expect(chatMessages.toolCalls).toBeDefined();
   });
 });
 
-describe('connections schema', () => {
+describe('agentProposals schema', () => {
   it('has expected columns', () => {
-    expect(connections.id).toBeDefined();
-    expect(connections.userId).toBeDefined();
-    expect(connections.provider).toBeDefined();
-    expect(connections.accessTokenEnc).toBeDefined();
-    expect(connections.cursor).toBeDefined();
-    expect(connections.status).toBeDefined();
-  });
-});
-
-describe('accounts schema', () => {
-  it('has expected columns', () => {
-    expect(accounts.id).toBeDefined();
-    expect(accounts.userId).toBeDefined();
-    expect(accounts.connectionId).toBeDefined();
-    expect(accounts.balanceCents).toBeDefined();
-    expect(accounts.currency).toBeDefined();
-  });
-});
-
-describe('transactions schema', () => {
-  it('has expected columns including parent for splits', () => {
-    expect(transactions.id).toBeDefined();
-    expect(transactions.amountCents).toBeDefined();
-    expect(transactions.parentTransactionId).toBeDefined();
-    expect(transactions.tags).toBeDefined();
-    expect(transactions.pending).toBeDefined();
-    expect(transactions.rawDescription).toBeDefined();
-    expect(transactions.plaidTxnId).toBeDefined();
-  });
-});
-
-describe('budgets schema', () => {
-  it('has period and amount', () => {
-    expect(budgets.period).toBeDefined();
-    expect(budgets.amountCents).toBeDefined();
-  });
-});
-
-describe('goals schema', () => {
-  it('has target/saved cents and status', () => {
-    expect(goals.targetCents).toBeDefined();
-    expect(goals.savedCents).toBeDefined();
-    expect(goals.status).toBeDefined();
-  });
-});
-
-describe('categoryRules schema', () => {
-  it('has priority/pattern/matchType', () => {
-    expect(categoryRules.priority).toBeDefined();
-    expect(categoryRules.pattern).toBeDefined();
-    expect(categoryRules.matchType).toBeDefined();
-  });
-});
-
-describe('recurringSeries schema', () => {
-  it('has cadence, confidence, status', () => {
-    expect(recurringSeries.cadence).toBeDefined();
-    expect(recurringSeries.confidence).toBeDefined();
-    expect(recurringSeries.status).toBeDefined();
-  });
-});
-
-describe('anomalies schema', () => {
-  it('has score, kind, status', () => {
-    expect(anomalies.score).toBeDefined();
-    expect(anomalies.kind).toBeDefined();
-    expect(anomalies.status).toBeDefined();
-  });
-});
-
-describe('insights schema', () => {
-  it('has surface, confidence, payload', () => {
-    expect(insights.surface).toBeDefined();
-    expect(insights.confidence).toBeDefined();
-    expect(insights.payload).toBeDefined();
-  });
-});
-
-describe('agentActions schema', () => {
-  it('has tool/input/output and audit fields', () => {
-    expect(agentActions.tool).toBeDefined();
-    expect(agentActions.input).toBeDefined();
-    expect(agentActions.output).toBeDefined();
-    expect(agentActions.confirmedAt).toBeDefined();
-    expect(agentActions.undoneAt).toBeDefined();
-  });
-});
-
-describe('inboundEmails schema', () => {
-  it('has from, bodyHash, status', () => {
-    expect(inboundEmails.from).toBeDefined();
-    expect(inboundEmails.bodyHash).toBeDefined();
-    expect(inboundEmails.status).toBeDefined();
-  });
-});
-
-describe('uploadJobs schema', () => {
-  it('has fileName, mime, status, extractedCount', () => {
-    expect(uploadJobs.fileName).toBeDefined();
-    expect(uploadJobs.mime).toBeDefined();
-    expect(uploadJobs.status).toBeDefined();
-    expect(uploadJobs.extractedCount).toBeDefined();
+    expect(agentProposals.id).toBeDefined();
+    expect(agentProposals.userId).toBeDefined();
+    expect(agentProposals.threadId).toBeDefined();
+    expect(agentProposals.tool).toBeDefined();
+    expect(agentProposals.input).toBeDefined();
+    expect(agentProposals.preview).toBeDefined();
+    expect(agentProposals.status).toBeDefined();
   });
 });

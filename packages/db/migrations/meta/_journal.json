@@ -8,6 +8,13 @@
       "when": 1777952232126,
       "tag": "0000_outstanding_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778058471767,
+      "tag": "0001_wooden_silver_samurai",
+      "breakpoints": true
     }
   ]
 }

@@ -27,3 +27,9 @@ export const goalStatusEnum = pgEnum('goal_status', [
 export const inboundEmailStatusEnum = pgEnum('inbound_email_status', [
   'received', 'parsed', 'failed',
 ]);
+
+export const proposalStatusEnum = pgEnum('proposal_status', [
+  'pending', 'confirmed', 'cancelled',
+]);
+
+export const chatRoleEnum = pgEnum('chat_role', ['user', 'assistant', 'tool']);
