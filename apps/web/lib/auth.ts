@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { createDb, users } from '@perfin/db';
 import { env } from './env';
 import { verifyPassword } from './password';
+import { makeSignInCallback } from './auth-callbacks';
 
 const { db } = createDb(env.DATABASE_URL);
 
@@ -34,10 +35,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
     ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
-      ? [Google({ clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET })]
+      ? [Google({
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+          allowDangerousEmailAccountLinking: true,
+        })]
       : []),
   ],
   callbacks: {
+    signIn: makeSignInCallback({
+      findUser: async (email) => {
+        const [u] = await db.select({ id: users.id }).from(users).where(eq(users.email, email));
+        return u ?? null;
+      },
+      insertUser: async (email) => {
+        await db.insert(users).values({ email, passwordHash: null, plan: 'free' });
+      },
+    }),
     async jwt({ token, user }) {
       if (user) token.id = user.id;
       return token;
@@ -45,6 +59,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user && token.id) (session.user as { id?: string }).id = String(token.id);
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) {
+        const path = url.slice(baseUrl.length);
+        if (path === '/' || path === '') return `${baseUrl}/app`;
+      }
+      return url;
     },
   },
 });
