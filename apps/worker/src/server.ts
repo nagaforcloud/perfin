@@ -9,6 +9,7 @@ import { regenerateRoutes } from './routes/regenerate';
 import { plaidSyncRoutes } from './routes/plaid-sync';
 import { plaidWebhookRoutes } from './routes/plaid-webhook';
 import { postmarkWebhookRoutes } from './routes/postmark-webhook';
+import { stripeWebhookRoutes } from './routes/stripe-webhook';
 import { startScheduler } from './lib/scheduler';
 import { regenerateForUser } from './lib/regenerate';
 import { syncOnePlaidConnection } from './lib/plaid-sync';
@@ -22,6 +23,7 @@ export async function buildServer() {
   await app.register(plaidSyncRoutes);
   await app.register(plaidWebhookRoutes);
   await app.register(postmarkWebhookRoutes);
+  await app.register(stripeWebhookRoutes);
   return app;
 }
 

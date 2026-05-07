@@ -18,6 +18,13 @@ const schema = z.object({
   POSTMARK_INBOUND_PASS: z.string().optional(),
   EMAIL_DOMAIN: z.string().default('in.perfin.app'),
   EMAIL_HASH_SECRET: z.string().min(8).default('dev-email-hash-secret'),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_PRICE_PLUS: z.string().optional(),
+  STRIPE_PRICE_PRO:  z.string().optional(),
+  VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  VAPID_SUBJECT: z.string().default('mailto:hello@perfin.app'),
 });
 
 export const env = schema.parse({
@@ -37,4 +44,11 @@ export const env = schema.parse({
   POSTMARK_INBOUND_PASS: process.env.POSTMARK_INBOUND_PASS,
   EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
   EMAIL_HASH_SECRET: process.env.EMAIL_HASH_SECRET,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  STRIPE_PRICE_PLUS: process.env.STRIPE_PRICE_PLUS,
+  STRIPE_PRICE_PRO: process.env.STRIPE_PRICE_PRO,
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+  VAPID_SUBJECT: process.env.VAPID_SUBJECT,
 });
