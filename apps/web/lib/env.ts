@@ -9,6 +9,13 @@ const schema = z.object({
   WORKER_URL: z.string().url().default('http://localhost:8001'),
   WORKER_HMAC_SECRET: z.string().min(8),
   ANTHROPIC_API_KEY: z.string().optional(),
+  KMS_KEY: z.string().regex(/^[a-f0-9]{64}$/i).optional(),
+  PLAID_CLIENT_ID: z.string().optional(),
+  PLAID_SECRET: z.string().optional(),
+  PLAID_ENV: z.enum(['sandbox', 'development', 'production']).default('sandbox'),
+  EMAIL_DOMAIN: z.string().default('in.perfin.app'),
+  EMAIL_HASH_SECRET: z.string().min(8).default('dev-email-hash-secret'),
+  PLAID_WEBHOOK_URL: z.string().url().default('http://localhost:8001/webhooks/plaid'),
 });
 
 export const env = schema.parse({
@@ -20,4 +27,11 @@ export const env = schema.parse({
   WORKER_URL: process.env.WORKER_URL,
   WORKER_HMAC_SECRET: process.env.WORKER_HMAC_SECRET,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+  KMS_KEY: process.env.KMS_KEY,
+  PLAID_CLIENT_ID: process.env.PLAID_CLIENT_ID,
+  PLAID_SECRET: process.env.PLAID_SECRET,
+  PLAID_ENV: process.env.PLAID_ENV,
+  EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
+  EMAIL_HASH_SECRET: process.env.EMAIL_HASH_SECRET,
+  PLAID_WEBHOOK_URL: process.env.PLAID_WEBHOOK_URL,
 });
