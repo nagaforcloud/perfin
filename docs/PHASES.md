@@ -10,7 +10,7 @@ Living document. Updated as each phase completes.
 | 1 — Core data loop | ✅ **Done** | `v0.2.0-phase1` | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
 | 2 — Insights & Home | ✅ **Done** | `v0.3.0-phase2` | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
 | 3 — Agentic chat | ✅ **Done** | `v0.4.0-phase3` | [Phase 3 plan](superpowers/plans/2026-05-06-perfin-phase-3-agentic-chat.md) | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
-| 4 — Multi-source ingestion | 📋 **Planned** | — | [Phase 4 plan](superpowers/plans/2026-05-06-perfin-phase-4-multi-source-ingestion.md) | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
+| 4 — Multi-source ingestion | ✅ **Done** | `v0.5.0-phase4` | [Phase 4 plan](superpowers/plans/2026-05-06-perfin-phase-4-multi-source-ingestion.md) | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
 | 5 — SaaS skin | 🕓 Not started | — | — | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
 
 After Phase 5: `v1.0.0` — publicly launchable.
@@ -69,6 +69,18 @@ Per the design spec the rough estimate is **~10 weeks solo**. Each phase ends in
 - Build fix during verification: `/app/ask` uses `useSearchParams()`, which Next.js 15 requires inside a `<Suspense>` boundary for prerender. Wrapped the inner page accordingly.
 - Architecture observation: write tools never mutate when the model calls them. `executeProposal` is the *only* code path that mutates, called by the explicit user-confirm endpoint. Every confirmed write writes a row to `agent_actions` with input/output/confirmed-by — surface in Settings → Activity.
 - **Dependency note:** Vercel AI SDK pulls in `zod-to-json-schema@3.25.x` which requires zod 3.25+, but `next-auth@5.0.0-beta.25` breaks with zod ≥ 3.25. Resolved with a root `pnpm.overrides` pin to `zod-to-json-schema@3.24.5`.
+
+---
+
+## Phase 4 completion notes
+
+- **2 commits** behind tag `v0.5.0-phase4`. All 8 packages typecheck cleanly (added **`@perfin/connectors`**); web (35 routes) + worker both build.
+- **142 unit tests pass**: db 14, ui 31, core 51, connectors 13, agent 8, extractors 13, worker 12.
+- New `@perfin/connectors` package — AES-256-GCM `encryptString`/`decryptString` (random IV, AEAD tag, tamper detection), per-user email-address derivation (HMAC), Plaid client + link-token + token exchange + paginated `transactionsSync` + webhook signature verifier (sandbox bypass), Postmark inbound parser (HDFC + ICICI debit/credit alerts) + timing-safe Basic Auth verifier.
+- Worker grew: HMAC-protected `POST /jobs/plaid-sync`, `POST /webhooks/plaid` (handles `SYNC_UPDATES_AVAILABLE` + `ITEM_ERROR`), `POST /webhooks/postmark` (Basic Auth → user lookup by email hash → parse → insert via existing pipeline), hourly Plaid cron alongside existing nightly insights cron.
+- Web grew: Plaid Link flow (`POST /api/connections/plaid/link-token`, `exchange`), connections list/disconnect/manual-sync, derived `/api/email-address`, `/api/upload-jobs`, hooks `useConnections`/`useEmailAddress`/`useUploadJobs`, Accounts page rewrite into 4 tabs (Bank connections / Manual accounts / Uploads / Email forwarding) with Plaid Link button, ConnectionCard with status badges + Sync now / Disconnect actions, copy-address widget on Email tab.
+- Web build: 35 routes, all under the 250 kB First Load JS bar.
+- Architecture observation: access tokens are encrypted at rest in `connections.access_token_enc`; decrypted only inside the worker's `syncOnePlaidConnection`. Web routes never see plaintext tokens. Disconnecting clears the token entirely (soft-delete keeps the row + history but removes the secret).
 
 ---
 
