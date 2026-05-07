@@ -1,38 +1,25 @@
-'use client';
+import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
+import { createDb, users } from '@perfin/db';
+import { auth } from '@/lib/auth';
+import { env } from '@/lib/env';
+import HomeClient from './_HomeClient';
 
-import { Skeleton } from '@perfin/ui';
-import { useHome } from '@/hooks/useHome';
-import { HeroNetWorth } from '@/components/home/HeroNetWorth';
-import { KpiStrip } from '@/components/home/KpiStrip';
-import { TodayInsight } from '@/components/home/TodayInsight';
-import { RecentActivity } from '@/components/home/RecentActivity';
-import { InboxPreview } from '@/components/home/InboxPreview';
+const { db } = createDb(env.DATABASE_URL);
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  const { data, isLoading } = useHome();
+const NEW_USER_WINDOW_MS = 60_000;
 
-  if (isLoading || !data) {
-    return (
-      <div className="p-8 max-w-6xl space-y-4">
-        <Skeleton variant="tile" />
-        <div className="grid grid-cols-4 gap-3">
-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} variant="kpi" />)}
-        </div>
-        <Skeleton variant="tile" />
-      </div>
-    );
+export default async function HomeShell() {
+  const session = await auth();
+  const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
+  if (!userIdStr) redirect('/login');
+
+  const userId = Number(userIdStr);
+  const [user] = await db.select({ createdAt: users.createdAt }).from(users).where(eq(users.id, userId));
+  if (user && Date.now() - user.createdAt.getTime() < NEW_USER_WINDOW_MS) {
+    redirect('/onboarding/welcome');
   }
 
-  return (
-    <div className="p-8 max-w-6xl space-y-4">
-      <h1 className="text-2xl font-semibold">Home</h1>
-      <HeroNetWorth data={data} />
-      <KpiStrip data={data} />
-      <TodayInsight data={data} />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2"><RecentActivity data={data} /></div>
-        <InboxPreview />
-      </div>
-    </div>
-  );
+  return <HomeClient />;
 }
