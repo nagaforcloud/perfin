@@ -4,9 +4,10 @@ import {
   categoryRules, recurringSeries, anomalies, insights, agentActions,
   inboundEmails, uploadJobs,
   chatThreads, chatMessages, agentProposals,
+  subscriptions, pushSubscriptions,
   planEnum, connectionStatusEnum, anomalyStatusEnum, insightSurfaceEnum,
   uploadStatusEnum, recurringStatusEnum, goalStatusEnum, inboundEmailStatusEnum,
-  proposalStatusEnum, chatRoleEnum,
+  proposalStatusEnum, chatRoleEnum, subscriptionStatusEnum,
 } from '../src/schema/index';
 
 describe('enums', () => {
@@ -40,9 +41,13 @@ describe('enums', () => {
   it('has chat roles', () => {
     expect(chatRoleEnum.enumValues).toEqual(['user', 'assistant', 'tool']);
   });
+  it('has subscription statuses', () => {
+    expect(subscriptionStatusEnum.enumValues).toEqual([
+      'trialing', 'active', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'unpaid',
+    ]);
+  });
 });
 
-// ... rest of existing schema tests ...
 describe('chatThreads schema', () => {
   it('has expected columns', () => {
     expect(chatThreads.id).toBeDefined();
@@ -71,5 +76,30 @@ describe('agentProposals schema', () => {
     expect(agentProposals.input).toBeDefined();
     expect(agentProposals.preview).toBeDefined();
     expect(agentProposals.status).toBeDefined();
+  });
+});
+
+describe('users.stripe_customer_id column added', () => {
+  it('exposes stripeCustomerId', () => {
+    expect(users.stripeCustomerId).toBeDefined();
+  });
+});
+
+describe('subscriptions schema', () => {
+  it('has expected columns', () => {
+    expect(subscriptions.userId).toBeDefined();
+    expect(subscriptions.stripeSubscriptionId).toBeDefined();
+    expect(subscriptions.stripePriceId).toBeDefined();
+    expect(subscriptions.plan).toBeDefined();
+    expect(subscriptions.status).toBeDefined();
+    expect(subscriptions.currentPeriodEnd).toBeDefined();
+  });
+});
+
+describe('pushSubscriptions schema', () => {
+  it('has endpoint, p256dh, auth', () => {
+    expect(pushSubscriptions.endpoint).toBeDefined();
+    expect(pushSubscriptions.p256dh).toBeDefined();
+    expect(pushSubscriptions.auth).toBeDefined();
   });
 });

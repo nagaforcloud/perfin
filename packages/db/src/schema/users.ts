@@ -8,10 +8,12 @@ export const users = pgTable(
     email: text('email').notNull(),
     passwordHash: text('password_hash').notNull(),
     plan: planEnum('plan').notNull().default('free'),
+    stripeCustomerId: text('stripe_customer_id'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
     emailUnique: uniqueIndex('users_email_unique').on(t.email),
+    stripeCustomerIdx: uniqueIndex('users_stripe_customer_unique').on(t.stripeCustomerId),
   }),
 );
 

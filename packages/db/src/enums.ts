@@ -33,3 +33,7 @@ export const proposalStatusEnum = pgEnum('proposal_status', [
 ]);
 
 export const chatRoleEnum = pgEnum('chat_role', ['user', 'assistant', 'tool']);
+
+export const subscriptionStatusEnum = pgEnum('subscription_status', [
+  'trialing', 'active', 'past_due', 'canceled', 'incomplete', 'incomplete_expired', 'unpaid',
+]);

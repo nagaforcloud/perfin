@@ -1,0 +1,22 @@
+{
+  "name": "@perfin/billing",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@perfin/db": "workspace:*",
+    "stripe": "17.4.0",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@perfin/config": "workspace:*",
+    "@types/node": "22.9.0",
+    "typescript": "5.6.3",
+    "vitest": "2.1.4"
+  }
+}

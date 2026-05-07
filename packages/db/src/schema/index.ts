@@ -16,3 +16,5 @@ export * from './uploadJobs';
 export * from './chatThreads';
 export * from './chatMessages';
 export * from './agentProposals';
+export * from './subscriptions';
+export * from './pushSubscriptions';

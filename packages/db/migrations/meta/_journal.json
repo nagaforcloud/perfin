@@ -15,6 +15,13 @@
       "when": 1778058471767,
       "tag": "0001_wooden_silver_samurai",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778130613392,
+      "tag": "0002_light_mongu",
+      "breakpoints": true
     }
   ]
 }
