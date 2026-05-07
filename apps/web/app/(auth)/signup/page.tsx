@@ -1,47 +1,45 @@
-'use client';
-
-import { useFormState, useFormStatus } from 'react-dom';
 import Link from 'next/link';
-import { Button, Tile, Field, Input } from '@perfin/ui';
-import { signupAction, type SignupState } from './actions';
+import { GoogleButton } from '@/components/auth/GoogleButton';
+import SignupForm from './_SignupForm';
+import { env } from '@/lib/env';
 
-const initial: SignupState = {};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" className="w-full" size="lg" disabled={pending}>
-      {pending ? 'Creating account…' : 'Create account'}
-    </Button>
-  );
-}
-
-export default function SignupPage() {
-  const [state, action] = useFormState(signupAction, initial);
+export default async function SignupPage(props: { searchParams: Promise<{ error?: string }> }) {
+  const sp = await props.searchParams;
+  const googleEnabled = !!env.GOOGLE_CLIENT_ID && !!env.GOOGLE_CLIENT_SECRET;
+  const errorMessage = errorBanner(sp.error);
 
   return (
-    <Tile variant="hero" className="space-y-5">
-      <header className="space-y-1">
-        <h1 className="text-xl font-semibold">Create your Perfin account</h1>
-        <p className="text-sm text-text-muted">It's free. No card required.</p>
-      </header>
-      <form action={action} className="space-y-4">
-        <Field label="Email" htmlFor="email">
-          <Input id="email" name="email" type="email" autoComplete="email" required />
-        </Field>
-        <Field
-          label="Password"
-          htmlFor="password"
-          hint="At least 8 characters."
-          error={state.error}
-        >
-          <Input id="password" name="password" type="password" autoComplete="new-password" required />
-        </Field>
-        <SubmitButton />
-      </form>
+    <div className="space-y-4">
+      {errorMessage && (
+        <div className="text-sm text-negative bg-negative-soft border border-negative rounded-md p-3">
+          {errorMessage}
+        </div>
+      )}
+      {googleEnabled && (
+        <>
+          <GoogleButton callbackUrl="/app" />
+          <div className="flex items-center gap-2 text-xs text-text-subtle">
+            <span className="flex-1 border-t border-border" />
+            <span>or</span>
+            <span className="flex-1 border-t border-border" />
+          </div>
+        </>
+      )}
+      <SignupForm />
       <p className="text-sm text-text-muted text-center">
         Already have an account? <Link className="text-accent" href="/login">Log in</Link>
       </p>
-    </Tile>
+    </div>
   );
+}
+
+function errorBanner(code: string | undefined): string | null {
+  if (!code) return null;
+  switch (code) {
+    case 'OAuthSignin':
+    case 'OAuthCallback': return 'Sign-in was cancelled or failed. Please try again.';
+    case 'AccessDenied':  return "We couldn't verify your Google email. Try a different account.";
+    case 'OAuthAccountNotLinked': return 'That email is already registered with a password. Log in with email + password instead.';
+    default: return 'Something went wrong. Please try again.';
+  }
 }
