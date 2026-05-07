@@ -10,7 +10,7 @@ Living document. Updated as each phase completes.
 | 1 — Core data loop | ✅ **Done** | `v0.2.0-phase1` | [Phase 1 plan](superpowers/plans/2026-05-05-perfin-phase-1-core-data-loop.md) | Upload → extract → categorize → see transactions on `/app/transactions` |
 | 2 — Insights & Home | ✅ **Done** | `v0.3.0-phase2` | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
 | 3 — Agentic chat | ✅ **Done** | `v0.4.0-phase3` | [Phase 3 plan](superpowers/plans/2026-05-06-perfin-phase-3-agentic-chat.md) | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
-| 4 — Multi-source ingestion | 🕓 Not started | — | — | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
+| 4 — Multi-source ingestion | 📋 **Planned** | — | [Phase 4 plan](superpowers/plans/2026-05-06-perfin-phase-4-multi-source-ingestion.md) | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
 | 5 — SaaS skin | 🕓 Not started | — | — | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
 
 After Phase 5: `v1.0.0` — publicly launchable.
