@@ -16,6 +16,11 @@ const schema = z.object({
   EMAIL_DOMAIN: z.string().default('in.perfin.app'),
   EMAIL_HASH_SECRET: z.string().min(8).default('dev-email-hash-secret'),
   PLAID_WEBHOOK_URL: z.string().url().default('http://localhost:8001/webhooks/plaid'),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_PRICE_PLUS: z.string().optional(),
+  STRIPE_PRICE_PRO:  z.string().optional(),
+  NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -34,4 +39,9 @@ export const env = schema.parse({
   EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
   EMAIL_HASH_SECRET: process.env.EMAIL_HASH_SECRET,
   PLAID_WEBHOOK_URL: process.env.PLAID_WEBHOOK_URL,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_PRICE_PLUS: process.env.STRIPE_PRICE_PLUS,
+  STRIPE_PRICE_PRO: process.env.STRIPE_PRICE_PRO,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
 });
