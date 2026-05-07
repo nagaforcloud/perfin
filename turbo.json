@@ -10,13 +10,23 @@
     "WORKER_HMAC_SECRET",
     "ANTHROPIC_API_KEY",
     "SKIP_DB_TESTS",
-    "NODE_ENV"
+    "NODE_ENV",
+    "CRON_DISABLED",
+    "CRON_NIGHTLY",
+    "CRON_HOURLY",
+    "KMS_KEY",
+    "PLAID_CLIENT_ID",
+    "PLAID_SECRET",
+    "PLAID_ENV",
+    "POSTMARK_INBOUND_USER",
+    "POSTMARK_INBOUND_PASS",
+    "EMAIL_DOMAIN",
+    "EMAIL_HASH_SECRET",
+    "WORKER_URL",
+    "NEXT_PUBLIC_WORKER_URL"
   ],
   "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
-    },
+    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "dist/**", "!.next/cache/**"] },
     "dev": { "cache": false, "persistent": true },
     "lint": { "outputs": [] },
     "typecheck": { "dependsOn": ["^build"], "outputs": [] },

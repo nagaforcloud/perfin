@@ -1,31 +1,23 @@
 {
-  "name": "@perfin/worker",
+  "name": "@perfin/connectors",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "exports": { ".": "./src/index.ts" },
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
-    "build": "tsc -p .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
-    "@perfin/connectors": "workspace:*",
     "@perfin/core": "workspace:*",
     "@perfin/db": "workspace:*",
-    "@perfin/extractors": "workspace:*",
     "drizzle-orm": "0.36.0",
-    "fastify": "5.1.0",
-    "node-cron": "3.0.3",
     "plaid": "28.0.0",
-    "zod": "3.24.2"
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@perfin/config": "workspace:*",
     "@types/node": "22.9.0",
-    "@types/node-cron": "3.0.11",
-    "tsx": "4.19.1",
     "typescript": "5.6.3",
     "vitest": "2.1.4"
   }
