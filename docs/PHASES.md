@@ -11,9 +11,9 @@ Living document. Updated as each phase completes.
 | 2 — Insights & Home | ✅ **Done** | `v0.3.0-phase2` | [Phase 2 plan](superpowers/plans/2026-05-06-perfin-phase-2-insights-and-home.md) | Recurring + anomaly detectors (TS port), Home bento page, Insights feed, Inbox, scheduled nightly job, monthly narrative, budgets read-only. *Demo-able milestone.* |
 | 3 — Agentic chat | ✅ **Done** | `v0.4.0-phase3` | [Phase 3 plan](superpowers/plans/2026-05-06-perfin-phase-3-agentic-chat.md) | Ask page, Vercel AI SDK + Claude streaming, 9-tool agent, write-confirm flow, `agent_actions` audit log, Settings → Activity. *Screenshot moment.* |
 | 4 — Multi-source ingestion | ✅ **Done** | `v0.5.0-phase4` | [Phase 4 plan](superpowers/plans/2026-05-06-perfin-phase-4-multi-source-ingestion.md) | Plaid Link, Postmark inbound email parsing, Connections page, scheduled syncs, sync error handling |
-| 5 — SaaS skin | 📋 **Planned** | — | [Phase 5 plan](superpowers/plans/2026-05-07-perfin-phase-5-saas-skin.md) | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
+| 5 — SaaS skin | ✅ **Done** | `v1.0.0` | [Phase 5 plan](superpowers/plans/2026-05-07-perfin-phase-5-saas-skin.md) | Marketing site (`/`, `/pricing`, `/how-it-works`, `/security`), Stripe billing for Plus/Pro, billing settings, live-demo widget on landing, PWA manifest + service worker + push notifications |
 
-After Phase 5: `v1.0.0` — publicly launchable.
+After Phase 5: **`v1.0.0` — publicly launchable. ✅ SHIPPED.**
 
 ---
 
@@ -81,6 +81,21 @@ Per the design spec the rough estimate is **~10 weeks solo**. Each phase ends in
 - Web grew: Plaid Link flow (`POST /api/connections/plaid/link-token`, `exchange`), connections list/disconnect/manual-sync, derived `/api/email-address`, `/api/upload-jobs`, hooks `useConnections`/`useEmailAddress`/`useUploadJobs`, Accounts page rewrite into 4 tabs (Bank connections / Manual accounts / Uploads / Email forwarding) with Plaid Link button, ConnectionCard with status badges + Sync now / Disconnect actions, copy-address widget on Email tab.
 - Web build: 35 routes, all under the 250 kB First Load JS bar.
 - Architecture observation: access tokens are encrypted at rest in `connections.access_token_enc`; decrypted only inside the worker's `syncOnePlaidConnection`. Web routes never see plaintext tokens. Disconnecting clears the token entirely (soft-delete keeps the row + history but removes the secret).
+
+---
+
+## Phase 5 completion notes
+
+- **3 commits** behind tag `v1.0.0`. All 9 packages typecheck cleanly (added **`@perfin/billing`**); web (40 routes including marketing) + worker both build (1m22s full build).
+- **158 unit tests pass**: db 18, ui 31, core 51, extractors 13, billing 10, connectors 13, agent 8, worker 14.
+- New `@perfin/billing` package — feature-gate matrix (8 features: Plaid, unlimited txns, Excel export, agent tiers, members, PDF reports), `hasFeature`/`isPlus`/`isPro`/`planForPriceId`, Stripe client factory (apiVersion `2024-11-20.acacia`), `createCheckoutSession`/`createPortalSession`, `interpretEvent` discriminated union for webhook events.
+- DB migration **0002**: `subscriptions`, `push_subscriptions` tables, `users.stripe_customer_id` column, `subscription_status` enum (7 Stripe statuses).
+- Worker: `POST /webhooks/stripe` (signature verify + subscription upsert/cancel + bumps `users.plan`), `lib/push.ts` (web-push fan-out, 410 cleanup), test routes for push.
+- Web: `/api/billing/{checkout,portal,status}`, `/api/push-subscriptions`, marketing route group with shared nav/footer + 5 pages (landing with Hero/FeatureGrid/LiveDemoWidget, pricing, how-it-works, security, changelog), Settings → Billing + Notifications panels, `PlanGate` component (Plaid Link gated to Plus), `usePlan` + `usePushSubscription` hooks, PWA service worker + manifest + register helper.
+- Build observation: original failure was a disk-space crunch on the build host (99% used). Cleared stale `.next` (586 MB) + worker `dist`; full build then succeeded in 1m22s. Code is clean.
+- README rewritten as launch-ready doc.
+
+**Perfin v1.0.0 is publicly launchable.** Six phases, ~13 weeks of work, 7 git tags from `v0.1.0-phase0` through `v1.0.0`. 9 packages typecheck cleanly, 158 tests pass, 40 web routes build under the 250 kB First Load JS bar.
 
 ---
 
