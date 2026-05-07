@@ -26,3 +26,17 @@ test('logout redirect: /app while logged out goes to /login', async ({ page, con
   await page.waitForURL('**/login');
   await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
 });
+
+test.describe('Google button visibility', () => {
+  test.skip(!process.env.GOOGLE_CLIENT_ID, 'requires GOOGLE_CLIENT_ID');
+
+  test('Continue with Google button visible on /login when env is set', async ({ page }) => {
+    await page.goto('/login');
+    await expect(page.getByRole('button', { name: /Continue with Google/i })).toBeVisible();
+  });
+
+  test('Continue with Google button visible on /signup when env is set', async ({ page }) => {
+    await page.goto('/signup');
+    await expect(page.getByRole('button', { name: /Continue with Google/i })).toBeVisible();
+  });
+});

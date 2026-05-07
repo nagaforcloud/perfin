@@ -309,6 +309,24 @@ The script is idempotent — re-running it is safe; existing rows are skipped vi
 
 Each integration is independent. Skip the ones you don't need; the relevant feature degrades gracefully.
 
+### Google OAuth (sign-in / sign-up)
+
+Add a "Continue with Google" button to `/login` and `/signup`.
+
+1. Visit <https://console.cloud.google.com>, create or select a project.
+2. APIs & Services → Credentials → **Create Credentials** → **OAuth client ID**.
+3. Application type: **Web application**. Name: `Perfin` (or whatever you like).
+4. Authorized redirect URIs: add `http://localhost:3000/api/auth/callback/google` for dev, and your production URL `<AUTH_URL>/api/auth/callback/google` for prod.
+5. Click **Create**. Copy the Client ID and Client Secret.
+6. Set in `.env`:
+   ```
+   GOOGLE_CLIENT_ID=...
+   GOOGLE_CLIENT_SECRET=...
+   ```
+7. Restart `pnpm dev`. The "Continue with Google" button now appears on `/login` and `/signup`.
+
+The first time a user signs in with Google, a `users` row is created (with `password_hash = null`) and they go through the standard 3-step onboarding. If the email already exists with a credentials password, providers are auto-linked (one account, two sign-in methods).
+
 ### Anthropic Claude (AI)
 
 Get an API key at <https://console.anthropic.com>. Set `ANTHROPIC_API_KEY` in `.env`.
