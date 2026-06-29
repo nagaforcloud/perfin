@@ -1,7 +1,7 @@
 import type { Account, Profile } from 'next-auth';
 
 export interface SignInCallbackDeps {
-  findUser: (email: string) => Promise<{ id: number } | null>;
+  findUser: (email: string) => Promise<{ id: string } | null>;
   insertUser: (email: string) => Promise<void>;
 }
 

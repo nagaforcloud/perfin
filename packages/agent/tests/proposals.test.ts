@@ -10,7 +10,7 @@ const url = process.env.DATABASE_URL ?? 'postgres://perfin:perfin@localhost:5433
 const skip = process.env.SKIP_DB_TESTS === '1';
 let db: Db;
 let close: () => Promise<void>;
-let userId: number;
+let userId: string;
 let txnId: number;
 
 beforeAll(async () => {

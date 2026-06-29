@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { and, desc, eq } from 'drizzle-orm';
-import { createDb, transactions, insights, accounts } from '@perfin/db';
+import { transactions, insights, accounts } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { computeKpis, formatCurrency } from '@perfin/core';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 const ymNow = () => new Date().toISOString().slice(0, 7);
@@ -14,7 +15,7 @@ export async function GET() {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
 
   const [allTxns, recent, todayInsights, accs] = await Promise.all([
     db.select({

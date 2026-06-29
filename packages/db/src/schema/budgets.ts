@@ -8,7 +8,7 @@ export const budgets = pgTable(
   'budgets',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     category: text('category').notNull(),
     amountCents: bigint('amount_cents', { mode: 'number' }).notNull(),
     period: text('period').notNull().default('monthly'),

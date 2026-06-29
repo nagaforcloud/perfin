@@ -9,7 +9,7 @@ describe('runPipeline', () => {
     const out = await runPipeline({
       buffer: csv,
       fileName: 'apr.csv',
-      userId: 1,
+      userId: '1',
       uploadJobId: 0,
       writeToDb: false,
     });

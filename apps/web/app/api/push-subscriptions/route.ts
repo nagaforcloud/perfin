@@ -1,17 +1,18 @@
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
-import { createDb, pushSubscriptions } from '@perfin/db';
+import { pushSubscriptions } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
 
   const { endpoint, keys } = (await req.json()) as { endpoint: string; keys: { p256dh: string; auth: string } };
   if (!endpoint || !keys?.p256dh || !keys?.auth) {

@@ -5,7 +5,7 @@ export const pushSubscriptions = pgTable(
   'push_subscriptions',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     endpoint: text('endpoint').notNull(),
     p256dh: text('p256dh').notNull(),
     auth: text('auth').notNull(),

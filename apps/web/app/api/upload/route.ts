@@ -3,13 +3,13 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { eq } from 'drizzle-orm';
-import { createDb, uploadJobs, users } from '@perfin/db';
+import { uploadJobs, users } from '@perfin/db';
 import { auth } from '@/lib/auth';
-import { env } from '@/lib/env';
+import { getDb } from '@/lib/db';
 import { callWorker } from '@/lib/worker';
 
 const UPLOAD_DIR = resolve(process.cwd(), '../..', 'data/uploads');
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 
 export const runtime = 'nodejs';
 
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
 
   const [u] = await db.select().from(users).where(eq(users.id, userId));
   if (!u) return NextResponse.json({ error: 'user not found' }, { status: 401 });

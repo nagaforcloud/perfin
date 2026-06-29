@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
 
 export interface AddressInput {
-  userId: number;
+  userId: string;
   secret: string;
   domain: string;
 }
@@ -16,7 +16,7 @@ export function parseUserHash(address: string): string | null {
   return m?.[1] ?? null;
 }
 
-export function findUserByAddress<T extends { id: number }>(
+export function findUserByAddress<T extends { id: string }>(
   users: T[],
   address: string,
   secret: string,

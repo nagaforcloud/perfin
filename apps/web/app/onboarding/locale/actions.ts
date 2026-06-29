@@ -12,7 +12,7 @@ export async function saveLocaleAction(formData: FormData) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) redirect('/login');
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const currency = String(formData.get('currency') ?? 'INR');
 
   const [u] = await db.select().from(users).where(eq(users.id, userId));
@@ -28,6 +28,10 @@ export async function saveLocaleAction(formData: FormData) {
       currency,
       color: '#6366f1',
     }).onConflictDoNothing();
+  }
+
+  if (!u.onboardedAt) {
+    await db.update(users).set({ onboardedAt: new Date() }).where(eq(users.id, userId));
   }
 
   redirect('/onboarding/connect');

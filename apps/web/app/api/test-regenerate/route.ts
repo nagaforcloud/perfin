@@ -11,7 +11,7 @@ export async function POST() {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const out = await callWorker<{ ok: true }>('/jobs/regenerate', { userId });
   return NextResponse.json(out);
 }

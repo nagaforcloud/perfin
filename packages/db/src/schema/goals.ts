@@ -9,7 +9,7 @@ export const goals = pgTable(
   'goals',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
     targetCents: bigint('target_cents', { mode: 'number' }).notNull(),
     savedCents: bigint('saved_cents', { mode: 'number' }).notNull().default(0),

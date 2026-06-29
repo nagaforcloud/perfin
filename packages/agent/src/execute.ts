@@ -5,7 +5,7 @@ import {
 
 export interface ExecuteInput {
   db: Db;
-  userId: number;
+  userId: string;
   proposalId: number;
 }
 
@@ -59,7 +59,7 @@ export async function executeProposal({ db, userId, proposalId }: ExecuteInput):
 }
 
 async function applyTransactionUpdate(
-  db: Db, userId: number,
+  db: Db, userId: string,
   input: { id: number; category?: string; description?: string },
 ) {
   const patch: Record<string, unknown> = { updatedAt: new Date() };
@@ -70,7 +70,7 @@ async function applyTransactionUpdate(
 }
 
 async function applyTransactionSplit(
-  db: Db, userId: number,
+  db: Db, userId: string,
   input: { id: number; splits: Array<{ amountCents: number; category: string; description: string }> },
 ) {
   const [parent] = await db.select().from(transactions).where(and(eq(transactions.id, input.id), eq(transactions.userId, userId)));
@@ -94,7 +94,7 @@ async function applyTransactionSplit(
 }
 
 async function applyBudgetUpsert(
-  db: Db, userId: number,
+  db: Db, userId: string,
   input: { category: string; amountCents: number; period: 'monthly' | 'quarterly' | 'annual' },
 ) {
   const [row] = await db.insert(budgets)
@@ -104,7 +104,7 @@ async function applyBudgetUpsert(
 }
 
 async function applyGoalCreate(
-  db: Db, userId: number,
+  db: Db, userId: string,
   input: { name: string; targetCents: number; deadline?: string },
 ) {
   const [row] = await db.insert(goals).values({

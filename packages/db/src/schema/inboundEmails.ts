@@ -9,7 +9,7 @@ export const inboundEmails = pgTable(
   'inbound_emails',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     from: text('from').notNull(),
     subject: text('subject').notNull().default(''),
     bodyHash: text('body_hash').notNull(),

@@ -7,11 +7,11 @@ export const agentActions = pgTable(
   'agent_actions',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     tool: text('tool').notNull(),
     input: jsonb('input').notNull(),
     output: jsonb('output'),
-    confirmedBy: integer('confirmed_by').references(() => users.id),
+    confirmedBy: text('confirmed_by').references(() => users.id),
     confirmedAt: timestamp('confirmed_at', { withTimezone: true }),
     undoneAt: timestamp('undone_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

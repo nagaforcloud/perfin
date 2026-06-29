@@ -9,7 +9,7 @@ export const anomalies = pgTable(
   'anomalies',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     transactionId: integer('transaction_id').notNull().references(() => transactions.id, { onDelete: 'cascade' }),
     kind: text('kind').notNull(),
     score: real('score').notNull(),

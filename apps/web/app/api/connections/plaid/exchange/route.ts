@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
-import { createDb, connections } from '@perfin/db';
+import { connections } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { createPlaid, encryptString, exchangePublicToken } from '@perfin/connectors';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 import { callWorker } from '@/lib/worker';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   if (!env.PLAID_CLIENT_ID || !env.PLAID_SECRET || !env.KMS_KEY) return NextResponse.json({ error: 'Plaid/KMS not configured' }, { status: 503 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const { publicToken } = (await req.json()) as { publicToken: string };
   if (!publicToken) return NextResponse.json({ error: 'publicToken required' }, { status: 400 });
 

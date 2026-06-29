@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
 import { and, eq } from 'drizzle-orm';
-import { createDb, transactions } from '@perfin/db';
+import { transactions } from '@perfin/db';
 import { auth } from '@/lib/auth';
-import { env } from '@/lib/env';
+import { getDb } from '@/lib/db';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const { id } = await params;
   const txnId = Number(id);
 

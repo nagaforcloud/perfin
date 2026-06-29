@@ -38,7 +38,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       ? [Google({
           clientId: env.GOOGLE_CLIENT_ID,
           clientSecret: env.GOOGLE_CLIENT_SECRET,
-          allowDangerousEmailAccountLinking: true,
         })]
       : []),
   ],
@@ -52,8 +51,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         await db.insert(users).values({ email, passwordHash: null, plan: 'free' });
       },
     }),
-    async jwt({ token, user }) {
-      if (user) token.id = user.id;
+    async jwt({ token, user, trigger }) {
+      // On sign-in/sign-up: record the token issue timestamp for revocation support
+      if (user && (trigger === 'signIn' || trigger === 'signUp')) {
+        const now = new Date();
+        await db.update(users).set({ lastTokenIssuedAt: now }).where(eq(users.id, String(user.id)));
+        token.id = user.id;
+        return token;
+      }
+
+      // On every request: verify the token hasn't been revoked
+      if (token.id && token.iat) {
+        const [u] = await db.select({ lastTokenIssuedAt: users.lastTokenIssuedAt })
+          .from(users).where(eq(users.id, String(token.id)));
+        if (u?.lastTokenIssuedAt) {
+          const issuedAtMs = token.iat * 1000;
+          const revokedMs = u.lastTokenIssuedAt.getTime();
+          // If the token was issued before the last revocation, invalidate it
+          if (issuedAtMs < revokedMs) {
+            return null;
+          }
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {

@@ -6,7 +6,7 @@ export const connections = pgTable(
   'connections',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     provider: text('provider').notNull(),
     providerAccountId: text('provider_account_id'),
     accessTokenEnc: text('access_token_enc'),

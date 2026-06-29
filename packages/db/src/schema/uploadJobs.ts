@@ -8,7 +8,7 @@ export const uploadJobs = pgTable(
   'upload_jobs',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     fileName: text('file_name').notNull(),
     mime: text('mime').notNull(),
     sizeBytes: bigint('size_bytes', { mode: 'number' }).notNull(),

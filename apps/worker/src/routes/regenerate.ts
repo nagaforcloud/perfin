@@ -1,19 +1,18 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import { createDb, users } from '@perfin/db';
+import { users, type Db } from '@perfin/db';
 import { env } from '../env';
 import { verify } from '../lib/hmac';
 import { regenerateForUser } from '../lib/regenerate';
 
 const Body = z.object({
-  userId: z.number().int().positive(),
+  userId: z.string().min(1),
   withNarrative: z.boolean().optional(),
 });
 
-const { db } = createDb(env.DATABASE_URL);
-
-export async function regenerateRoutes(app: FastifyInstance) {
+export async function regenerateRoutes(app: FastifyInstance, opts: { db: Db }) {
+  const { db } = opts;
   app.post('/jobs/regenerate', async (req, reply) => {
     const sig = req.headers['x-perfin-sig'];
     if (typeof sig !== 'string') return reply.code(401).send({ error: 'missing signature' });

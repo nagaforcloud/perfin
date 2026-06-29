@@ -9,7 +9,7 @@ describe('createCheckoutSession', () => {
     } as unknown as Parameters<typeof createCheckoutSession>[0]['stripe'];
 
     const result = await createCheckoutSession({
-      stripe, userId: 1, email: 'a@b.com', stripeCustomerId: null,
+      stripe, userId: '1', email: 'a@b.com', stripeCustomerId: null,
       priceId: 'price_plus', successUrl: 'https://app/success', cancelUrl: 'https://app/cancel',
     });
     expect(result.url).toBe('https://checkout.stripe/test');
@@ -24,7 +24,7 @@ describe('createCheckoutSession', () => {
     } as unknown as Parameters<typeof createCheckoutSession>[0]['stripe'];
 
     const result = await createCheckoutSession({
-      stripe, userId: 1, email: 'a@b.com', stripeCustomerId: 'cus_existing',
+      stripe, userId: '1', email: 'a@b.com', stripeCustomerId: 'cus_existing',
       priceId: 'price_plus', successUrl: 'https://app/success', cancelUrl: 'https://app/cancel',
     });
     expect(result.stripeCustomerId).toBe('cus_existing');

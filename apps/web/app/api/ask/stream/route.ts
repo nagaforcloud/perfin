@@ -1,12 +1,13 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
-import { eq, desc } from 'drizzle-orm';
-import { createDb, accounts, chatMessages, chatThreads, transactions } from '@perfin/db';
+import { and, eq, desc } from 'drizzle-orm';
+import { accounts, chatMessages, chatThreads, transactions } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { buildSystemPrompt, buildTools } from '@perfin/agent';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return new Response('unauthorized', { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return new Response('ANTHROPIC_API_KEY not configured', { status: 500 });
@@ -27,6 +28,12 @@ export async function POST(req: Request) {
     const title = (body.messages[body.messages.length - 1]?.content ?? 'New chat').slice(0, 60);
     const [t] = await db.insert(chatThreads).values({ userId, title }).returning();
     threadId = t!.id;
+  } else {
+    // Verify the thread belongs to this user — prevents cross-user message injection
+    const [t] = await db.select({ id: chatThreads.id })
+      .from(chatThreads)
+      .where(and(eq(chatThreads.id, threadId), eq(chatThreads.userId, userId)));
+    if (!t) return new Response('thread not found', { status: 404 });
   }
 
   const lastUser = [...body.messages].reverse().find((m) => m.role === 'user');

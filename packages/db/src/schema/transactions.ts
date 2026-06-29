@@ -9,7 +9,7 @@ export const transactions = pgTable(
   'transactions',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     accountId: integer('account_id').references(() => accounts.id, { onDelete: 'set null' }),
     date: date('date').notNull(),
     description: text('description').notNull(),

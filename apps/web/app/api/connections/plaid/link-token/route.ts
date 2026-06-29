@@ -11,6 +11,6 @@ export async function POST() {
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   if (!env.PLAID_CLIENT_ID || !env.PLAID_SECRET) return NextResponse.json({ error: 'Plaid not configured' }, { status: 503 });
   const client = createPlaid({ clientId: env.PLAID_CLIENT_ID, secret: env.PLAID_SECRET, env: env.PLAID_ENV });
-  const token = await createLinkToken(client, Number(userIdStr), env.PLAID_WEBHOOK_URL);
+  const token = await createLinkToken(client, userIdStr, env.PLAID_WEBHOOK_URL);
   return NextResponse.json({ linkToken: token });
 }

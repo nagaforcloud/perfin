@@ -7,7 +7,7 @@ export const agentProposals = pgTable(
   'agent_proposals',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     threadId: integer('thread_id').references(() => chatThreads.id, { onDelete: 'cascade' }),
     tool: text('tool').notNull(),
     input: jsonb('input').notNull(),

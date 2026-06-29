@@ -8,7 +8,7 @@ export const insights = pgTable(
   'insights',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     kind: text('kind').notNull(),
     headline: text('headline').notNull(),
     body: text('body').notNull(),

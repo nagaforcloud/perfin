@@ -10,7 +10,7 @@ export interface PushPayload {
 
 export async function sendPushNotification(
   payload: PushPayload,
-  opts: { userId: number },
+  opts: { userId: string },
 ): Promise<number> {
   const { db } = createDb(process.env.DATABASE_URL!);
   const subs = await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.userId, opts.userId));

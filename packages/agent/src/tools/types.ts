@@ -1,7 +1,7 @@
 import type { Db } from '@perfin/db';
 
 export interface ToolContext {
-  userId: number;
+  userId: string;
   db: Db;
   threadId: number | null;
   currency: string;

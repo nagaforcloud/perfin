@@ -29,6 +29,27 @@
       "when": 1778140909220,
       "tag": "0003_easy_stature",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778149944906,
+      "tag": "0004_cultured_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781163859228,
+      "tag": "0005_tiresome_diamondback",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1782772562628,
+      "tag": "0006_military_sprite",
+      "breakpoints": true
     }
   ]
 }

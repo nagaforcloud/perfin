@@ -1,5 +1,5 @@
 import { and, eq, sql } from 'drizzle-orm';
-import { anomalies, budgets, insights, recurringSeries, transactions, type Db } from '@perfin/db';
+import { anomalies, insights, recurringSeries, transactions, type Db } from '@perfin/db';
 import {
   detectAnomalies, detectRecurring,
   generateInsightProposals, generateNarrative,
@@ -8,7 +8,7 @@ import {
 import { env } from '../env.js';
 
 export interface RegenerateInput {
-  userId: number;
+  userId: string;
   db: Db;
   currency: string;
   withNarrative?: boolean;
@@ -105,8 +105,6 @@ export async function regenerateForUser(input: RegenerateInput): Promise<Regener
       surface: p.surface,
     });
   }
-
-  void budgets;
 
   return {
     insightCount: proposals.length,

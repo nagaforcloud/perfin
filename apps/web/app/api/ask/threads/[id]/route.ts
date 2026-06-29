@@ -1,17 +1,18 @@
 import { NextResponse } from 'next/server';
 import { and, asc, eq } from 'drizzle-orm';
-import { createDb, chatMessages, chatThreads } from '@perfin/db';
+import { chatMessages, chatThreads } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const { id } = await params;
   const threadId = Number(id);
 
@@ -26,7 +27,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const session = await auth();
   const userIdStr = session?.user && 'id' in session.user ? (session.user as { id?: string }).id : undefined;
   if (!userIdStr) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const { id } = await params;
   await db.delete(chatThreads).where(and(eq(chatThreads.id, Number(id)), eq(chatThreads.userId, userId)));
   return NextResponse.json({ ok: true });

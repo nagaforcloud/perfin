@@ -2,7 +2,7 @@ import type Stripe from 'stripe';
 
 export interface CheckoutInput {
   stripe: Stripe;
-  userId: number;
+  userId: string;
   email: string;
   stripeCustomerId: string | null;
   priceId: string;

@@ -6,7 +6,7 @@ export const subscriptions = pgTable(
   'subscriptions',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     stripeSubscriptionId: text('stripe_subscription_id').notNull(),
     stripePriceId: text('stripe_price_id').notNull(),
     plan: planEnum('plan').notNull(),

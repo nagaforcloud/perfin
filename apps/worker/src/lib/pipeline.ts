@@ -14,7 +14,7 @@ import { emit } from './jobs';
 export interface PipelineInput {
   buffer: Buffer;
   fileName: string;
-  userId: number;
+  userId: string;
   uploadJobId: number;
   writeToDb?: boolean;
   db?: Db;

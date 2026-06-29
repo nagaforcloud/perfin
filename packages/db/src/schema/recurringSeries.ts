@@ -8,7 +8,7 @@ export const recurringSeries = pgTable(
   'recurring_series',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     merchant: text('merchant').notNull(),
     category: text('category').notNull(),
     amountCents: bigint('amount_cents', { mode: 'number' }).notNull(),

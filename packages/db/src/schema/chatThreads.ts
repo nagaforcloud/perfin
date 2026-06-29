@@ -5,7 +5,7 @@ export const chatThreads = pgTable(
   'chat_threads',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     title: text('title').notNull().default('Untitled'),
     pinned: boolean('pinned').notNull().default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

@@ -19,7 +19,7 @@ export function createPlaid(config: PlaidConfig) {
 
 export async function createLinkToken(
   client: PlaidApi,
-  userId: number,
+  userId: string,
   webhookUrl: string,
 ): Promise<string> {
   const req: LinkTokenCreateRequest = {

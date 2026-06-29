@@ -7,7 +7,7 @@ export const categoryRules = pgTable(
   'category_rules',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     priority: integer('priority').notNull().default(5),
     matchType: text('match_type').notNull(),
     pattern: text('pattern').notNull(),

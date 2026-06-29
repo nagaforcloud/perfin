@@ -9,7 +9,7 @@ const SECRET = process.env.WORKER_HMAC_SECRET ?? 'dev-shared-secret-replace-in-p
 
 describe('POST /jobs/upload', () => {
   it('rejects without signature', async () => {
-    const app = await buildServer();
+    const { app } = await buildServer();
     const res = await app.inject({ method: 'POST', url: '/jobs/upload', payload: {} });
     expect(res.statusCode).toBe(401);
     await app.close();
@@ -20,11 +20,11 @@ describe('POST /jobs/upload', () => {
     await mkdir(dir, { recursive: true });
     const path = resolve(dir, 'apr.csv');
     await writeFile(path, 'Date,Description,Amount\n2026-04-01,Swiggy,-450\n');
-    const body = { userId: 1, uploadJobId: 0, filePath: path, fileName: 'apr.csv' };
+    const body = { userId: '1', uploadJobId: 0, filePath: path, fileName: 'apr.csv' };
     const payload = JSON.stringify(body);
     const sig = sign(SECRET, payload);
 
-    const app = await buildServer();
+    const { app } = await buildServer();
     const res = await app.inject({
       method: 'POST',
       url: '/jobs/upload',

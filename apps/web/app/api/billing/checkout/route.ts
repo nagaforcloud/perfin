@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
-import { createDb, users } from '@perfin/db';
+import { users } from '@perfin/db';
+import { getDb } from '@/lib/db';
 import { createStripe, createCheckoutSession } from '@perfin/billing';
 import { auth } from '@/lib/auth';
 import { env } from '@/lib/env';
 
-const { db } = createDb(env.DATABASE_URL);
+const { db } = getDb();
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
   if (!env.STRIPE_SECRET_KEY || !env.STRIPE_PRICE_PLUS || !env.STRIPE_PRICE_PRO) {
     return NextResponse.json({ error: 'billing not configured' }, { status: 503 });
   }
-  const userId = Number(userIdStr);
+  const userId = userIdStr;
   const { plan } = (await req.json()) as { plan: 'plus' | 'pro' };
 
   const [user] = await db.select().from(users).where(eq(users.id, userId));

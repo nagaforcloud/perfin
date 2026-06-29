@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { describe, expect, it, beforeAll, afterAll } from 'vitest';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { createDb, users, transactions, agentProposals, agentActions, budgets, goals, type Db } from '@perfin/db';
 import { transactionUpdate } from '../src/tools/transaction-update';
 import { budgetUpsert } from '../src/tools/budget-upsert';
@@ -11,7 +11,7 @@ const url = process.env.DATABASE_URL ?? 'postgres://perfin:perfin@localhost:5433
 const skip = process.env.SKIP_DB_TESTS === '1';
 let db: Db;
 let close: () => Promise<void>;
-let userId: number;
+let userId: string;
 let txnId: number;
 
 beforeAll(async () => {
@@ -61,5 +61,21 @@ describe.skipIf(skip)('executeProposal', () => {
     await executeProposal({ db, userId, proposalId: proposal.proposalId });
     const rows = await db.select().from(goals).where(eq(goals.userId, userId));
     expect(rows.find((g) => g.name === 'Japan trip')?.targetCents).toBe(500000);
+  });
+
+  it('rejects already-cancelled proposals', async () => {
+    const tool = budgetUpsert({ userId, db, threadId: null, currency: 'INR' });
+    const proposal = await tool.execute({ category: 'Transport', amountCents: 20000, period: 'monthly' });
+    // Cancel it first
+    await db.update(agentProposals).set({ status: 'cancelled' })
+      .where(eq(agentProposals.id, proposal.proposalId));
+    // Attempting to execute a cancelled proposal should throw
+    await expect(executeProposal({ db, userId, proposalId: proposal.proposalId }))
+      .rejects.toThrow(/cancelled/);
+  });
+
+  it('rejects non-existent proposals', async () => {
+    await expect(executeProposal({ db, userId, proposalId: 999999 }))
+      .rejects.toThrow(/not found/);
   });
 });
